@@ -17,7 +17,7 @@ from rest_framework.decorators import api_view
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('students')
 
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -45,7 +45,7 @@ def logout_view(request):
 
 def register_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('students')
 
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -66,6 +66,7 @@ def home(request):
     }
     return render(request,'home.html',data)
 
+@login_required(login_url='login')
 def students_page(request):
     students_qs = Student.objects.order_by('id')
     query = request.GET.get('search')
