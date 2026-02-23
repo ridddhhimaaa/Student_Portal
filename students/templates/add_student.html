@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h1>Add New Student</h1>
+
+{% if error %}
+<div class="error">
+    <strong>❌ Error:</strong> {{ error }}
+</div>
+{% endif %}
+
+<div class="card">
+    <form method="post" class="form">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Student Name" required>
+        <input type="number" name="age" placeholder="Age" required>
+        <input type="text" name="course" placeholder="Course" required>
+        <input type="number" name="marks" placeholder="Marks" required>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn">Submit</button>
+            <a class="btn secondary" href="{% url 'students' %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

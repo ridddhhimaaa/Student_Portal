@@ -1,0 +1,76 @@
+{% extends 'base.html'%}
+
+{% block content %}
+<h1>Students List</h1>
+
+<div class="card">
+    <div class="search-row">
+        <form method="get" style="display:flex; gap:10px; align-items:center;">
+            <input type="text" name="search" placeholder="Search by name or course" value="{{query | default:''}}">
+            <button class="btn">Search</button>
+        </form>
+
+        <div style="margin-left:auto">
+            <a class="btn" href="/add">Add New Student</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <caption>Students</caption>
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Course</th>
+                <th scope="col">Marks</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if students %}
+                {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{student.name}}</td>
+                    <td>{{student.age}}</td>
+                    <td>{{student.course}}</td>
+                    <td>{{student.marks}}</td>
+                    <td>
+                        <a class="btn" href="/edit/{{student.id}}">Edit</a>
+                        <a class="btn secondary" href="/delete/{{student.id}}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6">No students found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+    
+    {% if students.paginator.num_pages > 1 %}
+    <nav class="pagination" aria-label="Page navigation">
+        <ul style="display:flex; gap:8px; list-style:none; padding:0; margin-top:16px; align-items:center;">
+            {% if students.has_previous %}
+                <li><a class="btn" href="?page={{ students.previous_page_number }}{% if query %}&search={{ query }}{% endif %}">Previous</a></li>
+            {% endif %}
+
+            {% for num in students.paginator.page_range %}
+                {% if students.number == num %}
+                    <li><span class="btn current" style="background:#007bff;color:#fff">{{ num }}</span></li>
+                {% else %}
+                    <li><a class="btn" href="?page={{ num }}{% if query %}&search={{ query }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if students.has_next %}
+                <li><a class="btn" href="?page={{ students.next_page_number }}{% if query %}&search={{ query }}{% endif %}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+{% endblock %}
